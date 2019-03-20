@@ -48,7 +48,11 @@ command=${1-backup}
 
 if [ "$command" == "backup" ];
 then
-    source backup.sh
+	if [ "${SCHEDULE}" = "**None**" ]; then
+  	    /bin/sh backup.sh
+	else
+	  	exec go-cron "$SCHEDULE" /bin/sh backup.sh
+	fi
 elif [ "$command" == "restore" ];
 then
     source restore.sh
